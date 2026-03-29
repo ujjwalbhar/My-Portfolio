@@ -7,18 +7,26 @@ document.addEventListener('mousemove', (e) => {
     gsap.to(cursor, {
         x: e.clientX,
         y: e.clientY,
-        duration: 0.2,
+        duration: 0.15,
         ease: "power2.out"
     });
 });
 
 // Hover effects for interactive elements
-document.querySelectorAll('a, button, .project-card, .skill-chip').forEach(el => {
+document.querySelectorAll('a, button, .project-card, .skill-chip, .info-card, .social-icon').forEach(el => {
     el.addEventListener('mouseenter', () => {
-        gsap.to(cursor, { scale: 2, backgroundColor: "rgba(102, 126, 234, 0.5)", duration: 0.3 });
+        gsap.to(cursor, { 
+            scale: 2.5, 
+            backgroundColor: "rgba(102, 126, 234, 0.4)", 
+            duration: 0.3 
+        });
     });
     el.addEventListener('mouseleave', () => {
-        gsap.to(cursor, { scale: 1, backgroundColor: "rgba(0, 0, 0, 0.2)", duration: 0.3 });
+        gsap.to(cursor, { 
+            scale: 1, 
+            backgroundColor: "rgba(102, 126, 234, 0.3)", 
+            duration: 0.3 
+        });
     });
 });
 
@@ -26,49 +34,56 @@ document.querySelectorAll('a, button, .project-card, .skill-chip').forEach(el =>
 gsap.from(".hero h1", {
     y: 100,
     opacity: 0,
-    duration: 1.5,
+    duration: 1.4,
     ease: "power4.out"
 });
 
 gsap.from(".hero p", {
-    y: 50,
+    y: 40,
     opacity: 0,
     duration: 1.2,
-    delay: 0.5,
+    delay: 0.4,
     ease: "power3.out"
 });
 
 gsap.from(".hero-btn", {
-    scale: 0.8,
+    y: 30,
     opacity: 0,
     duration: 1,
-    delay: 0.8,
+    delay: 0.7,
     ease: "back.out(1.7)"
 });
 
-// Navbar Animation on Scroll
+// Navbar Scroll Effect
 const nav = document.querySelector('nav');
-window.addEventListener('scroll', () => {
-    if (window.scrollY > 50) {
-        gsap.to(nav, {
-            top: 10,
-            padding: "10px 25px",
-            width: "85%",
-            duration: 0.3
-        });
-    } else {
-        gsap.to(nav, {
-            top: 20,
-            padding: "15px 30px",
-            width: "90%",
-            duration: 0.3
-        });
+ScrollTrigger.create({
+    start: "top -50",
+    onUpdate: (self) => {
+        if (self.direction === 1) { // scrolling down
+            gsap.to(nav, { top: -100, duration: 0.3 });
+        } else { // scrolling up
+            gsap.to(nav, { top: 20, duration: 0.3, background: "rgba(255, 255, 255, 0.4)" });
+        }
     }
 });
 
-// Reveal Animations for Sections
+// Section Reveal Animations
 document.querySelectorAll('section').forEach(section => {
-    gsap.from(section.querySelectorAll('h2, .projects-grid, .skills-container, .contact-container'), {
+    const headings = section.querySelectorAll('h2');
+    const contentItems = section.querySelectorAll('.project-card, .info-card, .skill-chip, .about-content, .contact-container');
+    
+    gsap.from(headings, {
+        scrollTrigger: {
+            trigger: section,
+            start: "top 85%",
+            toggleActions: "play none none none"
+        },
+        y: 40,
+        opacity: 0,
+        duration: 0.8
+    });
+
+    gsap.from(contentItems, {
         scrollTrigger: {
             trigger: section,
             start: "top 80%",
@@ -77,20 +92,42 @@ document.querySelectorAll('section').forEach(section => {
         y: 60,
         opacity: 0,
         duration: 1,
-        stagger: 0.2,
+        stagger: 0.15,
         ease: "power2.out"
     });
 });
 
-// Skeuomorphic Button Interaction
-document.querySelectorAll('.project-link, .submit-btn').forEach(btn => {
-    btn.addEventListener('mousedown', () => {
-        gsap.to(btn, { scale: 0.95, duration: 0.1 });
-    });
-    btn.addEventListener('mouseup', () => {
-        gsap.to(btn, { scale: 1, duration: 0.1 });
+// Smooth Scroll for Navigation Links
+document.querySelectorAll('nav a').forEach(anchor => {
+    anchor.addEventListener('click', function(e) {
+        e.preventDefault();
+        const targetId = this.getAttribute('href');
+        const targetElement = document.querySelector(targetId);
+        
+        if (targetElement) {
+            window.scrollTo({
+                top: targetElement.offsetTop - 80,
+                behavior: 'smooth'
+            });
+        }
     });
 });
 
-// Mobile Nav Toggle (Optional enhancement)
-// Implementation would go here if hamburger menu is added
+// Form Submission Feedback
+const contactForm = document.getElementById('contact-form');
+if (contactForm) {
+    contactForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const btn = contactForm.querySelector('.submit-btn');
+        const originalText = btn.innerText;
+        
+        btn.innerText = "Message Sent!";
+        btn.style.background = "var(--accent-success)";
+        
+        setTimeout(() => {
+            btn.innerText = originalText;
+            btn.style.background = "linear-gradient(135deg, var(--accent-primary), var(--accent-secondary))";
+            contactForm.reset();
+        }, 3000);
+    });
+}
