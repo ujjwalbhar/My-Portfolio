@@ -59,14 +59,14 @@ function initAnimations() {
     gsap.utils.toArray('.skeuo-card').forEach(card => {
         card.addEventListener('mouseenter', () => {
             gsap.to(card, {
-                boxShadow: '30px 30px 60px #bcccdc, -30px -30px 60px #ffffff',
+                boxShadow: '30px 30px 60px #000, -30px -30px 60px #1c1c1c',
                 scale: 1.05,
                 duration: 0.3
             });
         });
         card.addEventListener('mouseleave', () => {
             gsap.to(card, {
-                boxShadow: '15px 15px 30px #bcccdc, -15px -15px 30px #ffffff',
+                boxShadow: '15px 15px 30px #000, -15px -15px 30px #1c1c1c',
                 scale: 1,
                 duration: 0.3
             });
@@ -74,16 +74,26 @@ function initAnimations() {
     });
 
     // ScrollReveal with ScrollTrigger
-    if (gsap.plugins.scrollTrigger) {
-        gsap.from('.project-card', {
-            scrollTrigger: {
-                trigger: '.project-grid',
-                start: 'top 80%'
-            },
-            y: 50,
-            opacity: 0,
-            duration: 1,
-            stagger: 0.3
-        });
-    }
+    gsap.from('.project-card', {
+        scrollTrigger: {
+            trigger: '.projects-section',
+            start: 'top 80%'
+        },
+        y: 50,
+        opacity: 0,
+        duration: 1,
+        stagger: 0.3
+    });
+
+    gsap.from('.skill-pill', {
+        scrollTrigger: {
+            trigger: '.skills-section',
+            start: 'top 80%'
+        },
+        scale: 0,
+        opacity: 0,
+        duration: 0.8,
+        stagger: 0.1,
+        ease: 'back.out(1.7)'
+    });
 }
