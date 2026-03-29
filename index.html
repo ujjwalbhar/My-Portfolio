@@ -1,1 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ujjwal Bhardwaj | Full Stack Developer</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+</head>
+<body>
+    <div id="custom-cursor" style="position: fixed; width: 20px; height: 20px; border-radius: 50%; background: rgba(0,0,0,0.2); pointer-events: none; z-index: 9999; transform: translate(-50%, -50%);"></div>
 
+    <nav>
+        <div class="logo">UB.</div>
+        <ul>
+            <li><a href="#home">Home</a></li>
+            <li><a href="#projects">Projects</a></li>
+            <li><a href="#skills">Skills</a></li>
+            <li><a href="#contact">Contact</a></li>
+        </ul>
+    </nav>
+
+    <section id="home" class="hero">
+        <h1>Hi, I'm Ujjwal</h1>
+        <p>Computer Science Student & Full Stack Developer</p>
+        <button class="hero-btn" onclick="document.getElementById('projects').scrollIntoView()">Explore My Work</button>
+    </section>
+
+    <section id="projects">
+        <h2>Featured Projects</h2>
+        <div class="projects-grid">
+            <div class="project-card">
+                <h3>Weather Dashboard</h3>
+                <p>Real-time weather tracking with location-based insights and intuitive UI.</p>
+                <a href="#" class="project-link">View Project</a>
+            </div>
+            <div class="project-card">
+                <h3>Task Manager</h3>
+                <p>Efficient task tracking system with priority settings and productivity metrics.</p>
+                <a href="#" class="project-link">View Project</a>
+            </div>
+            <div class="project-card">
+                <h3>Expense Tracker</h3>
+                <p>Comprehensive financial management tool for tracking daily expenses and budgets.</p>
+                <a href="#" class="project-link">View Project</a>
+            </div>
+            <div class="project-card">
+                <h3>Restaurant Site</h3>
+                <p>Responsive multi-page website for a restaurant featuring menu and reservation system.</p>
+                <a href="#" class="project-link">View Project</a>
+            </div>
+        </div>
+    </section>
+
+    <section id="skills">
+        <h2>Technical Skills</h2>
+        <div class="skills-container">
+            <span class="skill-chip">HTML5 / CSS3</span>
+            <span class="skill-chip">JavaScript (ES6+)</span>
+            <span class="skill-chip">Python</span>
+            <span class="skill-chip">C / C++</span>
+            <span class="skill-chip">GSAP</span>
+            <span class="skill-chip">Git / GitHub</span>
+            <span class="skill-chip">Responsive Design</span>
+            <span class="skill-chip">UI/UX Basics</span>
+        </div>
+    </section>
+
+    <section id="contact">
+        <h2>Get In Touch</h2>
+        <div class="contact-container">
+            <form id="contact-form">
+                <div class="form-group">
+                    <label>Name</label>
+                    <input type="text" placeholder="Your Name" required>
+                </div>
+                <div class="form-group">
+                    <label>Email</label>
+                    <input type="email" placeholder="Your Email" required>
+                </div>
+                <div class="form-group">
+                    <label>Message</label>
+                    <textarea rows="5" placeholder="Your Message" required></textarea>
+                </div>
+                <button type="submit" class="submit-btn">Send Message</button>
+            </form>
+        </div>
+    </section>
+
+    <footer>
+        <p>&copy; 2024 Ujjwal Bhardwaj. Built with GSAP & Passion.</p>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
