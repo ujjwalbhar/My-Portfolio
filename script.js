@@ -1,133 +1,126 @@
 // Register GSAP ScrollTrigger
 gsap.registerPlugin(ScrollTrigger);
 
-// Custom Cursor Animation
+// Custom Cursor & Blur Effect
 const cursor = document.getElementById('custom-cursor');
+const blur = document.getElementById('cursor-blur');
+
 document.addEventListener('mousemove', (e) => {
     gsap.to(cursor, {
         x: e.clientX,
         y: e.clientY,
-        duration: 0.15,
+        duration: 0.1,
+        ease: "power2.out"
+    });
+    gsap.to(blur, {
+        x: e.clientX,
+        y: e.clientY,
+        duration: 0.4,
         ease: "power2.out"
     });
 });
 
-// Hover effects for interactive elements
-document.querySelectorAll('a, button, .project-card, .skill-chip, .info-card, .social-icon').forEach(el => {
+// Interactive Elements Hover
+const interactiveElements = document.querySelectorAll('a, button, .skeuo-card, .skill-pill');
+interactiveElements.forEach(el => {
     el.addEventListener('mouseenter', () => {
-        gsap.to(cursor, { 
-            scale: 2.5, 
-            backgroundColor: "rgba(102, 126, 234, 0.4)", 
-            duration: 0.3 
+        gsap.to(cursor, {
+            scale: 3,
+            backgroundColor: "rgba(109, 93, 252, 0.3)",
+            duration: 0.3
         });
     });
     el.addEventListener('mouseleave', () => {
-        gsap.to(cursor, { 
-            scale: 1, 
-            backgroundColor: "rgba(102, 126, 234, 0.3)", 
-            duration: 0.3 
+        gsap.to(cursor, {
+            scale: 1,
+            backgroundColor: "#6d5dfc",
+            duration: 0.3
         });
     });
 });
 
-// Hero Section Animations
-gsap.from(".hero h1", {
+// Hero Animations
+const tl = gsap.timeline();
+tl.from(".reveal-text span", {
     y: 100,
     opacity: 0,
-    duration: 1.4,
+    duration: 1,
     ease: "power4.out"
-});
-
-gsap.from(".hero p", {
-    y: 40,
+})
+.from(".fade-in", {
     opacity: 0,
-    duration: 1.2,
-    delay: 0.4,
-    ease: "power3.out"
-});
-
-gsap.from(".hero-btn", {
-    y: 30,
+    y: 20,
+    duration: 0.8
+}, "-=0.5")
+.from(".hero-btns .btn", {
+    opacity: 0,
+    x: -30,
+    stagger: 0.2,
+    duration: 0.6
+}, "-=0.3")
+.from(".hero-visual .skeuo-box", {
+    scale: 0,
     opacity: 0,
     duration: 1,
-    delay: 0.7,
     ease: "back.out(1.7)"
-});
+}, "-=0.8");
 
-// Navbar Scroll Effect
-const nav = document.querySelector('nav');
-ScrollTrigger.create({
-    start: "top -50",
-    onUpdate: (self) => {
-        if (self.direction === 1) { // scrolling down
-            gsap.to(nav, { top: -100, duration: 0.3 });
-        } else { // scrolling up
-            gsap.to(nav, { top: 20, duration: 0.3, background: "rgba(255, 255, 255, 0.4)" });
-        }
+// Scroll Triggered Reveals
+const sections = document.querySelectorAll('section');
+sections.forEach(section => {
+    const title = section.querySelector('.section-title');
+    const cards = section.querySelectorAll('.skeuo-card, .skill-pill, .timeline-item');
+    
+    if (title) {
+        gsap.from(title, {
+            scrollTrigger: {
+                trigger: title,
+                start: "top 80%",
+            },
+            opacity: 0,
+            y: 30,
+            duration: 0.8
+        });
+    }
+
+    if (cards.length > 0) {
+        gsap.from(cards, {
+            scrollTrigger: {
+                trigger: section,
+                start: "top 70%",
+            },
+            opacity: 0,
+            y: 50,
+            stagger: 0.15,
+            duration: 0.8,
+            ease: "power2.out"
+        });
     }
 });
 
-// Section Reveal Animations
-document.querySelectorAll('section').forEach(section => {
-    const headings = section.querySelectorAll('h2');
-    const contentItems = section.querySelectorAll('.project-card, .info-card, .skill-chip, .about-content, .contact-container');
-    
-    gsap.from(headings, {
-        scrollTrigger: {
-            trigger: section,
-            start: "top 85%",
-            toggleActions: "play none none none"
-        },
-        y: 40,
-        opacity: 0,
-        duration: 0.8
-    });
-
-    gsap.from(contentItems, {
-        scrollTrigger: {
-            trigger: section,
-            start: "top 80%",
-            toggleActions: "play none none none"
-        },
-        y: 60,
-        opacity: 0,
-        duration: 1,
-        stagger: 0.15,
-        ease: "power2.out"
-    });
+// Parallax effect for the floating skeuo-box
+gsap.to(".floating", {
+    scrollTrigger: {
+        trigger: ".hero-section",
+        start: "top top",
+        end: "bottom top",
+        scrub: true
+    },
+    y: 150
 });
 
-// Smooth Scroll for Navigation Links
-document.querySelectorAll('nav a').forEach(anchor => {
-    anchor.addEventListener('click', function(e) {
+// Form Submission Interaction
+const form = document.querySelector('form');
+if (form) {
+    form.addEventListener('submit', (e) => {
         e.preventDefault();
-        const targetId = this.getAttribute('href');
-        const targetElement = document.querySelector(targetId);
-        
-        if (targetElement) {
-            window.scrollTo({
-                top: targetElement.offsetTop - 80,
-                behavior: 'smooth'
-            });
-        }
-    });
-});
-
-// Form Submission Feedback
-const contactForm = document.getElementById('contact-form');
-if (contactForm) {
-    contactForm.addEventListener('submit', (e) => {
-        e.preventDefault();
-        const btn = contactForm.querySelector('.submit-btn');
-        const originalText = btn.innerText;
-        
-        btn.innerText = "Message Sent!";
-        btn.style.background = "var(--accent-success)";
-        
-        setTimeout(() => {
-            btn.innerText = originalText;
-            btn.style.background = "linear-gradient(135deg, var(--accent-primary), var(--accent-secondary))";
-            contactForm.reset();
-        }, 3000);
+        const btn = form.querySelector('button');
+        gsap.to(btn, {
+            scale: 0.9,
+            duration: 0.1,
+            yoyo: true,
+            repeat: 1
+        });
+        alert("Message sent successfully! (Simulation)");
     });
 }
