@@ -3,18 +3,21 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ujjwal Bhardwaj | Full Stack Developer</title>
+    <title>Ujjwal Bhardwaj | Portfolio</title>
     <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
 </head>
 <body>
-    <div id="custom-cursor" style="position: fixed; width: 20px; height: 20px; border-radius: 50%; background: rgba(0,0,0,0.2); pointer-events: none; z-index: 9999; transform: translate(-50%, -50%);"></div>
+    <div id="custom-cursor"></div>
 
     <nav>
         <div class="logo">UB.</div>
         <ul>
             <li><a href="#home">Home</a></li>
+            <li><a href="#about">About</a></li>
+            <li><a href="#education">Education</a></li>
             <li><a href="#projects">Projects</a></li>
             <li><a href="#skills">Skills</a></li>
             <li><a href="#contact">Contact</a></li>
@@ -23,8 +26,42 @@
 
     <section id="home" class="hero">
         <h1>Hi, I'm Ujjwal</h1>
-        <p>Computer Science Student & Full Stack Developer</p>
-        <button class="hero-btn" onclick="document.getElementById('projects').scrollIntoView()">Explore My Work</button>
+        <p>B.Tech Computer Science Student • Full Stack Developer • AI/ML Enthusiast</p>
+        <button class="hero-btn" onclick="document.getElementById('about').scrollIntoView()">Start Exploring</button>
+    </section>
+
+    <section id="about">
+        <h2>About Me</h2>
+        <div class="about-content">
+            <div class="about-text">
+                <p>I am a highly motivated Computer Science student from Ghaziabad, currently pursuing my B.Tech under the AKTU curriculum. My passion lies in building immersive web experiences and exploring the frontiers of AI and Machine Learning.</p>
+                <p>With a hands-on approach to learning, I transition between full-stack development, game mechanics in Unity, and deep-diving into process management and operating systems.</p>
+            </div>
+        </div>
+    </section>
+
+    <section id="education">
+        <h2>Education & Experience</h2>
+        <div class="info-grid">
+            <div class="info-card">
+                <h3>Bachelor of Technology</h3>
+                <h4>Computer Science and Engineering</h4>
+                <p>Dr. A.P.J. Abdul Kalam Technical University (AKTU)</p>
+                <ul>
+                    <li>Focused on OS, Data Structures, and Algorithms</li>
+                    <li>Active participant in technical assessments and labs</li>
+                </ul>
+            </div>
+            <div class="info-card">
+                <h3>Achievements</h3>
+                <h4>Hackathons & Competitions</h4>
+                <ul>
+                    <li>Frequent participant in coding competitions</li>
+                    <li>Building practical projects to solve real-world problems</li>
+                    <li>Consistently engaging with GitHub for project management</li>
+                </ul>
+            </div>
+        </div>
     </section>
 
     <section id="projects">
@@ -32,38 +69,40 @@
         <div class="projects-grid">
             <div class="project-card">
                 <h3>Weather Dashboard</h3>
-                <p>Real-time weather tracking with location-based insights and intuitive UI.</p>
-                <a href="#" class="project-link">View Project</a>
+                <p>Real-time weather tracking with location-based insights and intuitive UI using modern APIs.</p>
+                <a href="#" class="project-link">View Demo</a>
             </div>
             <div class="project-card">
                 <h3>Task Manager</h3>
-                <p>Efficient task tracking system with priority settings and productivity metrics.</p>
-                <a href="#" class="project-link">View Project</a>
-            </div>
-            <div class="project-card">
-                <h3>Expense Tracker</h3>
-                <p>Comprehensive financial management tool for tracking daily expenses and budgets.</p>
-                <a href="#" class="project-link">View Project</a>
+                <p>Efficient task tracking system with priority settings and productivity metrics for streamlined workflow.</p>
+                <a href="#" class="project-link">View Demo</a>
             </div>
             <div class="project-card">
                 <h3>Restaurant Site</h3>
-                <p>Responsive multi-page website for a restaurant featuring menu and reservation system.</p>
-                <a href="#" class="project-link">View Project</a>
+                <p>Responsive multi-page website featuring advanced CSS animations and a reservation system.</p>
+                <a href="#" class="project-link">View Demo</a>
+            </div>
+            <div class="project-card">
+                <h3>Expense Tracker</h3>
+                <p>Comprehensive financial tool for tracking daily budgets with detailed data visualization.</p>
+                <a href="#" class="project-link">View Demo</a>
             </div>
         </div>
     </section>
 
     <section id="skills">
-        <h2>Technical Skills</h2>
+        <h2>Technical Arsenal</h2>
         <div class="skills-container">
             <span class="skill-chip">HTML5 / CSS3</span>
             <span class="skill-chip">JavaScript (ES6+)</span>
             <span class="skill-chip">Python</span>
             <span class="skill-chip">C / C++</span>
-            <span class="skill-chip">GSAP</span>
+            <span class="skill-chip">GSAP & Framer Motion</span>
             <span class="skill-chip">Git / GitHub</span>
-            <span class="skill-chip">Responsive Design</span>
-            <span class="skill-chip">UI/UX Basics</span>
+            <span class="skill-chip">Unity Game Engine</span>
+            <span class="skill-chip">AI/ML Basics</span>
+            <span class="skill-chip">Cybersecurity</span>
+            <span class="skill-chip">Responsive UI/UX</span>
         </div>
     </section>
 
@@ -72,16 +111,16 @@
         <div class="contact-container">
             <form id="contact-form">
                 <div class="form-group">
-                    <label>Name</label>
-                    <input type="text" placeholder="Your Name" required>
+                    <label>Your Name</label>
+                    <input type="text" placeholder="Ujjwal Bhardwaj" required>
                 </div>
                 <div class="form-group">
-                    <label>Email</label>
-                    <input type="email" placeholder="Your Email" required>
+                    <label>Email Address</label>
+                    <input type="email" placeholder="example@email.com" required>
                 </div>
                 <div class="form-group">
                     <label>Message</label>
-                    <textarea rows="5" placeholder="Your Message" required></textarea>
+                    <textarea rows="5" placeholder="How can I help you today?" required></textarea>
                 </div>
                 <button type="submit" class="submit-btn">Send Message</button>
             </form>
@@ -89,7 +128,12 @@
     </section>
 
     <footer>
-        <p>&copy; 2024 Ujjwal Bhardwaj. Built with GSAP & Passion.</p>
+        <div class="social-links">
+            <a href="https://github.com/ujjwalbhar" class="social-icon" target="_blank"><i class="fab fa-github"></i></a>
+            <a href="#" class="social-icon"><i class="fab fa-linkedin"></i></a>
+            <a href="mailto:ujjwal@example.com" class="social-icon"><i class="fas fa-envelope"></i></a>
+        </div>
+        <p>&copy; 2024 Ujjwal Bhardwaj. All rights reserved.</p>
     </footer>
 
     <script src="script.js"></script>
