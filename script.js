@@ -1,50 +1,69 @@
 gsap.registerPlugin(ScrollTrigger, ScrollToPlugin);
 
+let mouseX = 0, mouseY = 0;
+let ticking = false;
+
 const cursor = document.getElementById('custom-cursor');
 const blur = document.getElementById('cursor-blur');
 
-// Enhanced cursor tracking
+// Throttled cursor tracking with requestAnimationFrame
 document.addEventListener('mousemove', (e) => {
+    mouseX = e.clientX;
+    mouseY = e.clientY;
+    
+    if (!ticking) {
+        requestAnimationFrame(updateCursor);
+        ticking = true;
+    }
+});
+
+function updateCursor() {
     gsap.to(cursor, { 
-        x: e.clientX - 6, 
-        y: e.clientY - 6, 
-        duration: 0.1, 
-        ease: 'power2.out' 
+        x: mouseX - 6, 
+        y: mouseY - 6, 
+        duration: 0.05, 
+        overwrite: 'auto'
     });
     
     gsap.to(blur, { 
-        x: e.clientX, 
-        y: e.clientY, 
-        duration: 0.5, 
-        ease: 'power2.out' 
+        x: mouseX, 
+        y: mouseY, 
+        duration: 0.2, 
+        overwrite: 'auto'
     });
 
-    // Parallax effect on glass orb
-    const xPos = (e.clientX / window.innerWidth - 0.5) * 30;
-    const yPos = (e.clientY / window.innerHeight - 0.5) * 30;
-    gsap.to('.glass-orb', { 
-        x: xPos, 
-        y: yPos, 
-        duration: 0.8, 
-        ease: 'power2.out' 
-    });
-});
+    // Parallax effect on glass orb - only on desktop
+    if (window.innerWidth > 1024) {
+        const xPos = (mouseX / window.innerWidth - 0.5) * 20;
+        const yPos = (mouseY / window.innerHeight - 0.5) * 20;
+        gsap.to('.glass-orb', { 
+            x: xPos, 
+            y: yPos, 
+            duration: 0.6, 
+            overwrite: 'auto'
+        });
+    }
+    
+    ticking = false;
+}
 
-// Interactive cursor effects
-const interactiveElements = document.querySelectorAll('a, button, .glass-card, .skill-pill, .project-card, .info-card');
+// Interactive cursor effects - OPTIMIZED
+const interactiveElements = document.querySelectorAll('a, button, .glass-card, .skill-pill, .project-card');
 
 interactiveElements.forEach(el => {
     el.addEventListener('mouseenter', () => {
         gsap.to(cursor, { 
-            scale: 2.5, 
+            scale: 2, 
             backgroundColor: 'rgba(0, 217, 255, 0.8)', 
-            duration: 0.3 
+            duration: 0.2,
+            overwrite: 'auto'
         });
         
         gsap.to(blur, {
-            scale: 1.5,
-            opacity: 0.8,
-            duration: 0.3
+            scale: 1.3,
+            opacity: 0.6,
+            duration: 0.2,
+            overwrite: 'auto'
         });
     });
     
@@ -52,42 +71,52 @@ interactiveElements.forEach(el => {
         gsap.to(cursor, { 
             scale: 1, 
             backgroundColor: '#00d9ff', 
-            duration: 0.3 
+            duration: 0.2,
+            overwrite: 'auto'
         });
         
         gsap.to(blur, {
             scale: 1,
             opacity: 1,
-            duration: 0.3
+            duration: 0.2,
+            overwrite: 'auto'
         });
     });
 
-    // 3D tilt effect on glass cards
-    if (el.classList.contains('glass-card') || el.classList.contains('project-card') || el.classList.contains('info-card')) {
+    // 3D tilt effect ONLY on desktop & project cards - OPTIMIZED
+    if ((el.classList.contains('project-card') || el.classList.contains('glass-card')) && window.innerWidth > 768) {
+        let tiltTicking = false;
+        
         el.addEventListener('mousemove', (e) => {
-            const rect = el.getBoundingClientRect();
-            const x = e.clientX - rect.left;
-            const y = e.clientY - rect.top;
-            const centerX = rect.width / 2;
-            const centerY = rect.height / 2;
-            const rotateX = (y - centerY) / 20;
-            const rotateY = (centerX - x) / 20;
-            
-            gsap.to(el, { 
-                rotateX: rotateX, 
-                rotateY: rotateY, 
-                transformPerspective: 1200, 
-                duration: 0.5,
-                ease: 'power2.out'
-            });
+            if (!tiltTicking && window.innerWidth > 768) {
+                requestAnimationFrame(() => {
+                    const rect = el.getBoundingClientRect();
+                    const x = e.clientX - rect.left;
+                    const y = e.clientY - rect.top;
+                    const centerX = rect.width / 2;
+                    const centerY = rect.height / 2;
+                    const rotateX = (y - centerY) / 25;
+                    const rotateY = (centerX - x) / 25;
+                    
+                    gsap.to(el, { 
+                        rotateX: rotateX, 
+                        rotateY: rotateY, 
+                        transformPerspective: 1200, 
+                        duration: 0.3,
+                        overwrite: 'auto'
+                    });
+                });
+                tiltTicking = true;
+                setTimeout(() => { tiltTicking = false; }, 50);
+            }
         });
         
         el.addEventListener('mouseleave', () => {
             gsap.to(el, { 
                 rotateX: 0, 
                 rotateY: 0, 
-                duration: 0.8, 
-                ease: 'elastic.out(1, 0.4)' 
+                duration: 0.5, 
+                overwrite: 'auto'
             });
         });
     }
@@ -99,56 +128,50 @@ const tl = gsap.timeline();
 tl.from('.logo', { 
     y: -50, 
     opacity: 0, 
-    duration: 0.8, 
-    ease: 'power3.out' 
+    duration: 0.6
 })
 .from('.nav-links a', { 
     y: -20, 
     opacity: 0, 
-    stagger: 0.1, 
-    duration: 0.6 
-}, '-=0.4')
-.from('.reveal-text', { 
-    y: 100, 
-    opacity: 0, 
-    duration: 1.2, 
-    ease: 'expo.out' 
+    stagger: 0.08, 
+    duration: 0.5 
 }, '-=0.3')
+.from('.reveal-text', { 
+    y: 80, 
+    opacity: 0, 
+    duration: 0.8
+}, '-=0.2')
 .from('.fade-in', { 
     opacity: 0, 
-    y: 30, 
-    duration: 0.8 
-}, '-=0.8')
+    y: 20, 
+    duration: 0.6 
+}, '-=0.5')
 .from('.hero-btns .btn', { 
+    scale: 0.8, 
+    opacity: 0, 
+    stagger: 0.15, 
+    duration: 0.6
+}, '-=0.3')
+.from('.glass-orb', { 
     scale: 0.5, 
     opacity: 0, 
-    stagger: 0.2, 
-    duration: 0.8, 
-    ease: 'back.out(1.7)' 
-}, '-=0.5')
-.from('.glass-orb', { 
-    scale: 0, 
-    opacity: 0, 
-    duration: 1.2, 
-    ease: 'elastic.out(1, 0.5)' 
-}, '-=1');
+    duration: 0.8
+}, '-=0.5');
 
-// Scroll Animations
-gsap.utils.toArray('section').forEach((section, index) => {
+// Scroll Animations - SIMPLIFIED
+gsap.utils.toArray('section').forEach((section) => {
     const title = section.querySelector('.section-title');
-    const cards = section.querySelectorAll('.glass-card, .skill-pill, .project-card, .info-card, .about-card');
+    const cards = section.querySelectorAll('.glass-card, .skill-pill, .project-card');
     
     if (title) {
         gsap.from(title, {
             scrollTrigger: { 
                 trigger: title, 
-                start: 'top 85%', 
-                toggleActions: 'play none none reverse' 
+                start: 'top 80%'
             },
             opacity: 0, 
-            y: 40, 
-            duration: 1, 
-            ease: 'power3.out'
+            y: 30, 
+            duration: 0.8
         });
     }
     
@@ -156,35 +179,39 @@ gsap.utils.toArray('section').forEach((section, index) => {
         gsap.from(cards, {
             scrollTrigger: { 
                 trigger: section, 
-                start: 'top 75%', 
-                toggleActions: 'play none none reverse' 
+                start: 'top 70%'
             },
             opacity: 0, 
-            y: 60, 
-            scale: 0.85, 
-            stagger: 0.12, 
-            duration: 1, 
-            ease: 'power2.out'
+            y: 40, 
+            scale: 0.9, 
+            stagger: 0.1, 
+            duration: 0.8
         });
     }
 });
 
-// Magnetic Button Effect
+// Magnetic Button Effect - OPTIMIZED
 const magneticBtns = document.querySelectorAll('.btn');
 
 magneticBtns.forEach(btn => {
+    let btnTicking = false;
+    
     btn.addEventListener('mousemove', (e) => {
-        if (btn.classList.contains('primary') || btn.classList.contains('secondary')) {
-            const rect = btn.getBoundingClientRect();
-            const x = e.clientX - rect.left - rect.width / 2;
-            const y = e.clientY - rect.top - rect.height / 2;
-            
-            gsap.to(btn, { 
-                x: x * 0.25, 
-                y: y * 0.25, 
-                duration: 0.3, 
-                ease: 'power2.out' 
+        if (!btnTicking) {
+            requestAnimationFrame(() => {
+                const rect = btn.getBoundingClientRect();
+                const x = e.clientX - rect.left - rect.width / 2;
+                const y = e.clientY - rect.top - rect.height / 2;
+                
+                gsap.to(btn, { 
+                    x: x * 0.2, 
+                    y: y * 0.2, 
+                    duration: 0.2, 
+                    overwrite: 'auto'
+                });
             });
+            btnTicking = true;
+            setTimeout(() => { btnTicking = false; }, 50);
         }
     });
     
@@ -192,8 +219,7 @@ magneticBtns.forEach(btn => {
         gsap.to(btn, { 
             x: 0, 
             y: 0, 
-            duration: 0.6, 
-            ease: 'elastic.out(1, 0.3)' 
+            duration: 0.4
         });
     });
 });
@@ -204,92 +230,58 @@ if (contactForm) {
     contactForm.addEventListener('submit', (e) => {
         e.preventDefault();
         
-        // Add success animation
         gsap.to(contactForm, {
             scale: 0.95,
-            duration: 0.2,
-            ease: 'back.out(1.7)',
+            duration: 0.15,
             onComplete: () => {
-                gsap.to(contactForm, {
-                    scale: 1,
-                    duration: 0.3
-                });
-                
-                // Reset form
+                gsap.to(contactForm, { scale: 1, duration: 0.2 });
                 contactForm.reset();
                 
-                // Show success message
                 const submitBtn = contactForm.querySelector('.submit-btn');
                 const originalText = submitBtn.textContent;
                 submitBtn.textContent = '✓ Message Sent!';
                 
                 setTimeout(() => {
                     submitBtn.textContent = originalText;
-                }, 2000);
+                }, 1500);
             }
         });
     });
 }
 
-// Smooth scroll behavior with GSAP
+// Smooth scroll behavior
 document.querySelectorAll('a[href^="#"]').forEach(anchor => {
     anchor.addEventListener('click', function (e) {
         e.preventDefault();
         const target = document.querySelector(this.getAttribute('href'));
         if (target) {
             gsap.to(window, {
-                duration: 1,
-                scrollTo: {
-                    y: target,
-                    autoKill: false
-                },
+                duration: 0.8,
+                scrollTo: { y: target, autoKill: false },
                 ease: 'power2.inOut'
             });
         }
     });
 });
 
-// Parallax background shapes
-gsap.to('.shape-1', {
-    scrollTrigger: {
-        trigger: 'body',
-        start: 'top top',
-        end: 'bottom bottom',
-        scrub: 1,
-        markers: false
-    },
-    y: 500,
-    rotation: 360,
-    ease: 'none'
-});
-
-gsap.to('.shape-2', {
-    scrollTrigger: {
-        trigger: 'body',
-        start: 'top top',
-        end: 'bottom bottom',
-        scrub: 1,
-        markers: false
-    },
-    y: -500,
-    rotation: -360,
-    ease: 'none'
-});
+// REMOVED: Expensive parallax shapes with scrub
+// Instead using simple CSS animations
 
 // Skill pill click interaction
 document.querySelectorAll('.skill-pill').forEach(pill => {
     pill.addEventListener('click', () => {
         gsap.to(pill, {
-            scale: 1.2,
-            duration: 0.3,
+            scale: 1.15,
+            duration: 0.2,
             yoyo: true,
-            repeat: 1,
-            ease: 'elastic.out(1.2, 0.8)'
+            repeat: 1
         });
     });
 });
 
-// Stagger animation on page load for better performance
-window.addEventListener('load', () => {
-    gsap.to(document.body, { opacity: 1, duration: 0.5, delay: 0.2 });
-});
+// Disable animations on mobile
+if (window.innerWidth < 768) {
+    document.querySelectorAll('.glass-card, .project-card').forEach(el => {
+        el.style.perspective = 'none';
+    });
+}
